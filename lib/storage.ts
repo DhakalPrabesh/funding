@@ -186,6 +186,12 @@ export const login = (username: string, password: string): User | null => {
   if (username === 'admin' && password === 'admin123') {
     const user: User = { username: 'admin', role: 'admin' }
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user))
+
+    // Notify listeners that auth state has changed
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('auth-change'))
+    }
+
     return user
   }
   return null
@@ -193,6 +199,11 @@ export const login = (username: string, password: string): User | null => {
 
 export const logout = () => {
   localStorage.removeItem(STORAGE_KEYS.USER)
+
+  // Notify listeners that auth state has changed
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('auth-change'))
+  }
 }
 
 // Settings

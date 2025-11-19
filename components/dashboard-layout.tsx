@@ -34,7 +34,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }, [router])
 
   if (!user) {
-    return null
+    // Show a lightweight placeholder while auth state is being resolved
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-sm text-muted-foreground">Loading dashboard...</div>
+      </div>
+    )
   }
 
   return (

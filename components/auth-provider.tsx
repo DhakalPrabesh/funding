@@ -16,7 +16,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
 
   useEffect(() => {
+    // Initialize from storage on mount
     setUser(getCurrentUser())
+
+    // Listen for auth changes from storage utilities
+    const handleAuthChange = () => {
+      setUser(getCurrentUser())
+    }
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('auth-change', handleAuthChange)
+      window.addEventListener('storage', handleAuthChange)
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('auth-change', handleAuthChange)
+        window.removeEventListener('storage', handleAuthChange)
+      }
+    }
   }, [])
 
   const logout = () => {
